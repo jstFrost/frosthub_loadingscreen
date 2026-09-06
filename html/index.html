@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Loading Screen</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+    <!-- Background -->
+    <div id="bg-slideshow">
+        <div class="bg-layer active"></div>
+        <div class="bg-layer"></div>
+    </div>
+    <video id="bg-video" muted loop playsinline></video>
+    <canvas id="bg-particles"></canvas>
+    <div id="bg-overlay"></div>
+
+    <div id="app">
+
+        <!-- Music player -->
+        <section id="music-player" class="panel hidden">
+            <div class="mp-art">
+                <div class="mp-eq">
+                    <span></span><span></span><span></span><span></span><span></span>
+                </div>
+            </div>
+            <div class="mp-info">
+                <div class="mp-title" id="mp-title">--</div>
+                <div class="mp-artist" id="mp-artist">--</div>
+                <div class="mp-controls">
+                    <button id="mp-prev">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7 6v12M19 6.8v10.4L10.5 12 19 6.8z" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <button id="mp-play">
+                        <svg class="icon-play" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 5.6v12.8L18.5 12 8 5.6z" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                        </svg>
+                        <svg class="icon-pause" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8.5 5.5v13M15.5 5.5v13" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                    <button id="mp-next">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17 6v12M5 6.8v10.4L13.5 12 5 6.8z" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="mp-volume">
+                    <span class="mp-volume-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4 9.5v5h3.4L12 18V6L7.4 9.5H4z" fill="currentColor"/>
+                            <path d="M15.8 9c1.1 1 1.1 5 0 6M18.2 7c2.2 2.3 2.2 7.7 0 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                    <input type="range" id="mp-volume-slider" min="0" max="1" step="0.01" />
+                </div>
+            </div>
+        </section>
+
+        <!-- Patch notes -->
+        <section id="patch-notes" class="panel hidden">
+            <div id="patch-notes-list"></div>
+        </section>
+
+        <!-- Progress bar -->
+        <section id="center-stage">
+            <div id="progress-wrap">
+                <div id="progress-label"></div>
+                <div id="progress-blocks"></div>
+                <div id="progress-footer">
+                    <span id="progress-status">Initializing…</span>
+                    <span id="progress-percent">0%</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- About us + featured images -->
+        <aside id="side-panel">
+            <section id="about-card" class="panel hidden">
+                <div class="about-logo-row">
+                    <img class="about-logo" src="img/logo.svg" alt="logo" />
+                    <span id="about-server-name"></span>
+                </div>
+            </section>
+
+            <section id="staff-panel" class="panel hidden">
+                <h3 id="staff-title"></h3>
+                <div id="staff-list"></div>
+            </section>
+
+            <section id="featured-images" class="panel hidden">
+                <h3 id="featured-title"></h3>
+                <div id="featured-track"></div>
+                <div id="featured-dots"></div>
+            </section>
+        </aside>
+
+        <!-- Socials -->
+        <section id="socials-wrap" class="hidden">
+            <div id="socials-list"></div>
+        </section>
+
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/locales.js"></script>
+    <script src="js/themes.js"></script>
+    <script src="js/icons.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
