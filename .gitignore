@@ -1,0 +1,14 @@
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Local media you may not want to publish
+# (uncomment if your backgrounds/tracks are large or licensed)
+# html/img/background*.jpg
+# html/sounds/*.mp3
