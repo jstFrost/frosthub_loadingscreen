@@ -160,16 +160,10 @@ const CONFIG = {
        You can also point "avatar" to a local file in html/img/ instead.
        -------------------------------------------------------------------- */
     staff: [
-        // {
-        //     name: "YourName",
-        //     role: { en: "Owner", it: "Fondatore", es: "Fundador", fr: "Fondateur" },
-        //     avatar: "https://cdn.discordapp.com/avatars/123456789012345678/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.png?size=128",
-        // },
-        // {
-        //     name: "AnotherName",
-        //     role: "Head Admin",
-        //     avatar: "https://cdn.discordapp.com/avatars/123456789012345678/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.png?size=128",
-        // },
+        {
+            name: "Frost",
+            role: "Dev",
+        },
     ],
 
     /* --------------------------------------------------------------------
@@ -213,6 +207,15 @@ const CONFIG = {
                 it: "Nuovi comandi per lo staff e miglioramenti UI.",
                 es: "Nuevos comandos de staff y mejoras de interfaz.",
                 fr: "Nouvelles commandes staff et améliorations de l'interface.",
+            },
+        },
+        {
+            title: "PATCH NOTES",
+            text: {
+                en: "Performance improvements on the west side of the map.",
+                it: "Miglioramenti alle performance sul lato ovest della mappa.",
+                es: "Mejoras de rendimiento en el lado oeste del mapa.",
+                fr: "Améliorations des performances côté ouest de la carte.",
             },
         },
     ],

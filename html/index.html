@@ -77,15 +77,16 @@
             </div>
         </section>
 
-        <!-- About us + featured images -->
-        <aside id="side-panel">
-            <section id="about-card" class="panel hidden">
-                <div class="about-logo-row">
-                    <img class="about-logo" src="img/logo.svg" alt="logo" />
-                    <span id="about-server-name"></span>
-                </div>
-            </section>
+        <!-- Server logo: floats free above everything else, no panel behind it -->
+        <div id="about-card" class="about-floating hidden">
+            <div class="about-logo-row">
+                <img class="about-logo" src="img/logo.svg" alt="logo" />
+                <span id="about-server-name"></span>
+            </div>
+        </div>
 
+        <!-- Staff + featured images -->
+        <aside id="side-panel">
             <section id="staff-panel" class="panel hidden">
                 <h3 id="staff-title"></h3>
                 <div id="staff-list"></div>
@@ -97,6 +98,22 @@
                 <div id="featured-dots"></div>
             </section>
         </aside>
+
+        <!-- Show/hide the patch notes and staff panels entirely -->
+        <div id="panel-controls" class="panel-controls hidden">
+            <button class="pc-toggle" type="button" data-target="patch-notes">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="5" y="4" width="14" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/>
+                    <path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+            </button>
+            <button class="pc-toggle" type="button" data-target="staff-panel">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.6"/>
+                    <path d="M5.5 19c1-3.3 3.7-5 6.5-5s5.5 1.7 6.5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
 
         <!-- Socials -->
         <section id="socials-wrap" class="hidden">

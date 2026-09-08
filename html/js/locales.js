@@ -14,6 +14,7 @@ const LOCALES = {
     /* ------------------------------- ENGLISH ------------------------------ */
     en: {
         staffTitle: "STAFF",
+        panelToggle: "Show / hide",
         featuredImages: "FEATURED IMAGES",
         progressLabel: "INITIATING CONNECTION",
         status: {
@@ -38,6 +39,7 @@ const LOCALES = {
     /* ------------------------------- ITALIAN ------------------------------ */
     it: {
         staffTitle: "STAFF",
+        panelToggle: "Mostra / nascondi",
         featuredImages: "IMMAGINI IN EVIDENZA",
         progressLabel: "CONNESSIONE IN CORSO",
         status: {
@@ -62,6 +64,7 @@ const LOCALES = {
     /* ------------------------------- SPANISH ------------------------------ */
     es: {
         staffTitle: "EQUIPO",
+        panelToggle: "Mostrar / ocultar",
         featuredImages: "IMÁGENES DESTACADAS",
         progressLabel: "INICIANDO CONEXIÓN",
         status: {
@@ -86,6 +89,7 @@ const LOCALES = {
     /* ------------------------------- FRENCH ------------------------------- */
     fr: {
         staffTitle: "ÉQUIPE",
+        panelToggle: "Afficher / masquer",
         featuredImages: "IMAGES À LA UNE",
         progressLabel: "CONNEXION EN COURS",
         status: {

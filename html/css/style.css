@@ -47,13 +47,15 @@
     --accent: #d4e83a;
     --accent-soft: rgba(212, 232, 58, 0.15);
     --bg: #0a0b0a;
-    --panel-bg: rgba(10, 12, 10, 0.72);
+    --panel-bg: rgba(10, 12, 10, 0.55);
     --panel-border: rgba(212, 232, 58, 0.25);
     --text-primary: #f2f4ec;
     --text-secondary: rgba(242, 244, 236, 0.6);
     --bar-empty: rgba(255, 255, 255, 0.08);
     --bar-filled: #d4e83a;
     --overlay-opacity: 0.55;
+    /* Cinematic ease-out: snappier finish than the browser default "ease". */
+    --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -123,17 +125,19 @@ button:disabled, input:disabled {
 #app {
     position: fixed; inset: 0;
     z-index: 5;
-    padding: 28px;
+    padding: 40px;
     display: grid;
     grid-template-columns: 300px 1fr 320px;
     grid-template-rows: auto 1fr auto;
-    gap: 20px;
+    gap: 28px;
 }
 
 /* ---------------- PANELS ---------------- */
 .panel {
     position: relative;
     background:
+        /* Diagonal sheen: light catching the glass from the top-left. */
+        linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0) 40%),
         repeating-linear-gradient(0deg,
             rgba(255, 255, 255, 0.018) 0 1px,
             transparent 1px 3px),
@@ -147,8 +151,13 @@ button:disabled, input:disabled {
         14px 100%,
         0 calc(100% - 14px)
     );
-    padding: 16px;
-    backdrop-filter: blur(6px);
+    padding: 22px;
+    backdrop-filter: blur(22px) saturate(180%) brightness(1.05);
+    /* Ambient contact shadow for lift + a hairline top highlight, like light
+       catching the top edge of glass. */
+    box-shadow:
+        0 24px 48px -18px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 .panel::before,
 .panel::after {
@@ -169,12 +178,13 @@ button:disabled, input:disabled {
     border-right: 2px solid var(--accent);
 }
 
-/* Staggered panel entrance animation */
+/* Staggered panel entrance animation: a soft focus-pull (blur + scale)
+   reads more premium than a plain slide-and-fade. */
 @keyframes panelIn {
-    from { opacity: 0; transform: translateY(14px); }
-    to   { opacity: 1; transform: none; }
+    from { opacity: 0; transform: translateY(14px) scale(0.98); filter: blur(4px); }
+    to   { opacity: 1; transform: none; filter: blur(0); }
 }
-.panel, #socials-wrap, #progress-wrap { animation: panelIn 0.6s ease both; }
+.panel, #socials-wrap, #progress-wrap { animation: panelIn 0.7s var(--ease-premium) both; }
 #about-card        { animation-delay: 0.05s; }
 #patch-notes       { animation-delay: 0.15s; }
 #staff-panel       { animation-delay: 0.2s; }
@@ -252,6 +262,7 @@ button:disabled, input:disabled {
     /* No focus ring / blue highlight left behind after a click */
     outline: none;
     -webkit-tap-highlight-color: transparent;
+    transition: background 0.25s var(--ease-premium), transform 0.25s var(--ease-premium), border-color 0.25s var(--ease-premium);
 }
 .mp-controls button:focus { outline: none; }
 .mp-controls button svg {
@@ -264,7 +275,7 @@ button:disabled, input:disabled {
 #mp-play .icon-pause { display: none; }
 #music-player.playing #mp-play .icon-play  { display: none; }
 #music-player.playing #mp-play .icon-pause { display: block; }
-.mp-controls button:hover { background: var(--accent-soft); }
+.mp-controls button:hover { background: var(--accent-soft); border-color: var(--accent); transform: scale(1.08); }
 .mp-volume { display: flex; align-items: center; gap: 6px; font-size: 11px; }
 .mp-volume-icon {
     display: flex;
@@ -282,6 +293,9 @@ button:disabled, input:disabled {
     grid-column: 1;
     grid-row: 1;
     align-self: start;
+    /* Lines its top edge up with the staff panel on the other side, which
+       sits lower to clear the floating logo above it. */
+    margin-top: 56px;
     /* Max panel height: past this the scrollbar appears */
     max-height: 260px;
     display: flex;
@@ -291,7 +305,7 @@ button:disabled, input:disabled {
 #patch-notes-list {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 18px;
     flex: 1 1 auto;
     min-height: 0;
     overflow-y: auto;
@@ -329,12 +343,28 @@ button:disabled, input:disabled {
     text-align: center;
 }
 #progress-wrap {
+    position: relative;
     width: min(560px, 60vw);
     display: flex;
     flex-direction: column;
     gap: 8px;
     margin-top: auto;
     margin-bottom: 56px;
+}
+/* Slow ambient breathing glow behind the bar: no new markup needed, purely
+   a ::before so it never intercepts clicks or affects layout. */
+#progress-wrap::before {
+    content: "";
+    position: absolute;
+    inset: -70px -60px;
+    background: radial-gradient(ellipse at center, var(--accent-soft) 0%, rgba(0, 0, 0, 0) 70%);
+    z-index: -1;
+    pointer-events: none;
+    animation: ambientBreathe 6s ease-in-out infinite;
+}
+@keyframes ambientBreathe {
+    0%, 100% { opacity: 0.35; transform: scale(1); }
+    50%      { opacity: 0.65; transform: scale(1.08); }
 }
 #progress-label {
     font-size: 11px;
@@ -364,11 +394,17 @@ button:disabled, input:disabled {
     border-radius: 1px;
     /* Block skew: set 0deg for straight blocks */
     transform: skewX(-16deg);
-    transition: background 0.25s ease, box-shadow 0.25s ease;
+    transition: background 0.35s var(--ease-premium), box-shadow 0.35s var(--ease-premium);
 }
 .block.filled {
     background: var(--bar-filled);
     box-shadow: 0 0 10px var(--accent-soft), 0 0 3px var(--bar-filled);
+    /* One-shot flash-fade the instant a block fills, on top of the steady glow. */
+    animation: blockPop 0.4s var(--ease-premium);
+}
+@keyframes blockPop {
+    0%   { filter: brightness(1.8); }
+    100% { filter: brightness(1); }
 }
 /* Sheen sweeping across the filled blocks */
 .block.filled::after {
@@ -393,7 +429,7 @@ button:disabled, input:disabled {
     color: var(--text-secondary);
     text-transform: uppercase;
 }
-#progress-percent { color: var(--accent); font-weight: 700; }
+#progress-percent { color: var(--accent); font-weight: 700; text-shadow: 0 0 12px var(--accent-soft); }
 
 /* ---------------- SIDE PANEL (right) ---------------- */
 #side-panel {
@@ -401,8 +437,11 @@ button:disabled, input:disabled {
     grid-row: 1 / span 2;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
     overflow-y: auto;
+    /* Clears the floating logo above it, which no longer takes up a grid
+       row of its own now that it sits outside the normal flow. */
+    margin-top: 56px;
 }
 /* Same thin accent scrollbar as the patch notes, so a long staff list does not
    pull in the browser's default one. */
@@ -421,6 +460,23 @@ button:disabled, input:disabled {
     letter-spacing: 2px;
     font-size: 15px;
 }
+
+/* ---------------- FLOATING SERVER LOGO (no panel behind it) ---------------- */
+.about-floating {
+    position: absolute;
+    /* Sits above the panel grid, tucked closer to the screen corner
+       instead of lining up flush with the other panels. */
+    top: 6px;
+    right: 6px;
+    z-index: 6;
+    /* Drop-shadow (not a text-shadow) keeps both the SVG logo and the
+       text legible with no panel/background behind them. */
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 18px rgba(0, 0, 0, 0.55));
+    animation: panelIn 0.7s var(--ease-premium) both;
+}
+.about-floating .about-logo { width: 46px; height: 46px; }
+/* Logo only, no server name next to it. */
+.about-floating #about-server-name { display: none; }
 #staff-panel h3, #featured-images h3 {
     font-size: 11px;
     letter-spacing: 2px;
@@ -429,11 +485,23 @@ button:disabled, input:disabled {
     text-transform: uppercase;
 }
 
+/* Shrinks to fit the roster instead of stretching across the whole
+   column (that width exists for featured-images below it, not this),
+   but keeps a margin so longer names have room to land in. */
+#staff-panel {
+    /* Flush to the right edge of the column, so it keeps the same margin
+       from the screen edge as patch notes does on the left. */
+    align-self: flex-end;
+    width: fit-content;
+    min-width: 240px;
+    max-width: 100%;
+}
+
 /* Staff list: Discord-style rows (avatar + name + role) */
 #staff-list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
 }
 .staff-item {
     display: flex;
@@ -505,8 +573,12 @@ button:disabled, input:disabled {
     align-self: end;
     display: flex;
     justify-content: flex-end;
+    /* This box spans the whole grid cell even though the icons only sit at
+       its right edge: without this the invisible left half would sit on
+       top of #panel-controls (same cell, opposite side) and eat its clicks. */
+    pointer-events: none;
 }
-#socials-list { display: flex; gap: 10px; }
+#socials-list { display: flex; gap: 10px; pointer-events: auto; }
 .social-icon {
     width: 34px; height: 34px;
     border-radius: 50%;
@@ -519,12 +591,44 @@ button:disabled, input:disabled {
     transition: all 0.2s ease;
 }
 .social-icon svg { width: 16px; height: 16px; }
+.social-icon { transition: color 0.3s var(--ease-premium), border-color 0.3s var(--ease-premium), box-shadow 0.3s var(--ease-premium), transform 0.3s var(--ease-premium); }
 .social-icon:hover {
     color: var(--accent);
     border-color: var(--accent);
-    box-shadow: 0 0 10px var(--accent-soft);
+    box-shadow: 0 0 14px var(--accent-soft);
     transform: translateY(-2px);
 }
+
+/* ---------------- PANEL VISIBILITY TOGGLES ---------------- */
+/* Shares the socials cell (bottom-right) but pinned to its opposite edge,
+   so it stays out of the way of both the staff panel and the floating
+   logo above it. */
+#panel-controls {
+    grid-column: 3;
+    grid-row: 3;
+    align-self: end;
+    justify-self: start;
+    display: flex;
+    gap: 10px;
+}
+.pc-toggle {
+    width: 34px; height: 34px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: 1px solid var(--panel-border);
+    background: transparent;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: color 0.25s var(--ease-premium), border-color 0.25s var(--ease-premium), box-shadow 0.25s var(--ease-premium), transform 0.25s var(--ease-premium);
+}
+.pc-toggle svg { width: 15px; height: 15px; pointer-events: none; }
+.pc-toggle:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+/* Lit up = that panel is currently on screen; dim = fully hidden. */
+.pc-toggle.is-active { color: var(--accent); border-color: var(--accent); box-shadow: 0 0 10px var(--accent-soft); }
 
 /* Responsive fallback.
    grid-row has to be reset alongside grid-column: leaving the desktop rows in
@@ -540,14 +644,17 @@ button:disabled, input:disabled {
     #patch-notes,
     #center-stage,
     #side-panel,
-    #socials-wrap {
+    #socials-wrap,
+    #panel-controls {
         grid-column: 1;
         grid-row: auto;
         align-self: auto;
+        justify-self: auto;
     }
     /* It already scrolls with the page here: a nested scroller would trap the
        staff list inside a second, tiny scrollbar. */
     #side-panel { overflow-y: visible; }
     #progress-wrap { width: 100%; margin: 8px 0; }
     #socials-wrap { justify-content: center; }
+    #panel-controls { justify-content: center; }
 }

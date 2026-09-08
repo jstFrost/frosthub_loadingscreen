@@ -58,6 +58,7 @@
 
     const FALLBACK_LOCALE = {
         staffTitle: "STAFF",
+        panelToggle: "Show / hide",
         featuredImages: "FEATURED IMAGES",
         progressLabel: "INITIATING CONNECTION",
         status: {
@@ -543,6 +544,42 @@
     }
 
     /* ===============================================================
+       PANEL VISIBILITY TOGGLES
+       Lets the player fully switch the patch notes / staff panels on
+       and off (not just collapse them) using the same "hidden" class
+       the config-driven visibility already relies on. Runs last, after
+       the panels' own setup, so it sees their real starting state:
+       disabled in config or emptied of content both count as "off"
+       and get no toggle at all.
+       =============================================================== */
+    function setupPanelControls() {
+        const dock = document.getElementById("panel-controls");
+        if (!dock) return;
+        let anyLeft = false;
+
+        dock.querySelectorAll(".pc-toggle").forEach(function (btn) {
+            const target = document.getElementById(btn.dataset.target);
+            const available = target && !target.classList.contains("hidden");
+            if (!available) {
+                btn.remove();
+                return;
+            }
+            anyLeft = true;
+            // Start closed: available panels begin hidden, the player opens
+            // them from here.
+            target.classList.add("hidden");
+            btn.classList.remove("is-active");
+            btn.title = T.panelToggle;
+            btn.addEventListener("click", function () {
+                const nowHidden = target.classList.toggle("hidden");
+                btn.classList.toggle("is-active", !nowHidden);
+            });
+        });
+
+        dock.classList.toggle("hidden", !anyLeft);
+    }
+
+    /* ===============================================================
        PROGRESS BAR
        =============================================================== */
     const progress = {
@@ -717,6 +754,7 @@
         run("staff", setupStaff);
         run("patchNotes", setupPatchNotes);
         run("featuredImages", setupFeaturedImages);
+        run("panelControls", setupPanelControls);
         run("socials", setupSocials);
         run("musicPlayer", setupMusicPlayer);
         run("progressBar", setupProgressBar);
